@@ -6,9 +6,14 @@ import { ThemeProvider } from 'styled-components';
 import App from './App';
 import GlobalStyle from './styles/global-style';
 import { theme } from './styles/theme';
+import { RecoilRoot } from 'recoil';
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
+    <RecoilRoot>
+      <App />
+      <MainCal />
+    </RecoilRoot>
     <GlobalStyle />
     <App />
     <Sidebar />
