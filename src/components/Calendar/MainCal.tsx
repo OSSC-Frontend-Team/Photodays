@@ -24,8 +24,8 @@ const MainCal = () => {
     alert('clicked');
   };
 
-  const calendarArr = (): any[] => {
-    let result: any[] = [];
+  const calendarArr = () => {
+    let result: JSX.Element[] = [];
     let week: number = firstWeek;
     for (week; week <= lastWeek; week++) {
       result = result.concat(
