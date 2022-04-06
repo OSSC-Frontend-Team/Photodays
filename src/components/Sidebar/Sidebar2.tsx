@@ -45,20 +45,18 @@ const SideBar = styled.div`
   flex-direction: column;
   border-right: 2px solid;
   border-radius: 0;
-  border-color: rgba(64, 194, 133, 0.693);
+  border-color: #9ab0a7;
   background-color: rgb(255, 255, 255);
-  transition: 0.8s ease;
+  transition: 0.5s ease;
 `;
 
 const ToggleMenu = styled.div`
-  height: 60px;
+  height: 70px;
   border-top-right-radius: 10rem;
   border-bottom-right-radius: 10rem;
-  width: 10px;
+  width: 15px;
   position: absolute;
   outline: none;
   z-index: 1;
-  background-color: rgba(64, 194, 133, 0.693);
-  border-color: rgba(64, 194, 133, 0.693);
-  border-left: 0;
+  background-color: #9ab0a7;
 `;
