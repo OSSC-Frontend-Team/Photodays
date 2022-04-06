@@ -15,15 +15,11 @@ export const Date = styled.p`
   color: #108210;
 `;
 
-export const Thumbnail = styled.div`
+export const Thumbnail = styled.img`
   width: 350px;
   height: 320px;
   border: 1px solid #f0f0f0;
   border-radius: 8px;
-  background-image: url('./images/test-thumbnail.JPG');
-  background-repeat: no-repeat;
-  background-size: 350px 320px;
-  background-position: center;
 `;
 
 export const SetContentInputList = styled.ul`

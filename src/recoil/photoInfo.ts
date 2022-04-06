@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 // date => 적합 날짜에 랜더링
 export interface InfoType {
   date: string;
-  img_url: string;
+  img_url: string | ArrayBuffer | null;
   title: string;
   location: string;
   description: string;
