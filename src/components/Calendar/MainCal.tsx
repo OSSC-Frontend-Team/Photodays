@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
+import { mockData } from './mockdata';
+import { theme } from '../../styles/theme';
 
 const MainCal = () => {
   const [getMoment, setMoment] = useState(moment());
+
+  const dates: string[] = [];
+  mockData.map((obj) => {
+    if (obj.date !== 'empty') dates.push(obj.date);
+  });
 
   const today: moment.Moment = getMoment;
   const firstWeek: number = today.clone().startOf('month').week();
@@ -24,38 +31,51 @@ const MainCal = () => {
     alert('clicked');
   };
 
-  const calendarArr = () => {
+  const makeCalendar = () => {
     let result: JSX.Element[] = [];
     let week: number = firstWeek;
     for (week; week <= lastWeek; week++) {
       result = result.concat(
-        <TR key={week}>
+        <Week key={week}>
           {Array(7)
             .fill(0)
             .map((_: null, idx: number) => {
               const days: moment.Moment = today.clone().startOf('year').week(week).startOf('week').add(idx, 'day');
 
-              if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+              if (dates.includes(days.format('YYYYMMDD'))) {
                 return (
-                  <TD key={idx} style={{ backgroundColor: '#114A38' }} onClick={popUp}>
-                    <Days>{days.format('D')}</Days>
-                  </TD>
+                  <Day
+                    key={idx}
+                    style={{
+                      backgroundImage: `url(${mockData[1].img_url})`,
+                      backgroundSize: 'cover',
+                    }}
+                    onClick={popUp}
+                  >
+                    <Date>{days.format('D')}</Date>
+                  </Day>
+                );
+              } else if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+                return (
+                  <Day key={idx} onClick={popUp}>
+                    <Date style={{ backgroundColor: `${theme.color.main}`, color: 'white' }}>{days.format('D')}</Date>
+                  </Day>
                 );
               } else if (days.format('MM') !== today.format('MM')) {
                 return (
-                  <TD key={idx} style={{ backgroundColor: '#9AB0A7' }} onClick={popUp}>
-                    <Days>{days.format('D')}</Days>
-                  </TD>
+                  <Day key={idx} style={{ color: 'lightgray' }} onClick={popUp}>
+                    <Date>{days.format('D')}</Date>
+                  </Day>
                 );
               } else {
                 return (
-                  <TD key={idx} onClick={popUp}>
-                    <Days>{days.format('D')}</Days>
-                  </TD>
+                  <Day key={idx} onClick={popUp}>
+                    <Date>{days.format('D')}</Date>
+                  </Day>
                 );
               }
             })}
-        </TR>,
+        </Week>,
       );
     }
     return result;
@@ -70,7 +90,16 @@ const MainCal = () => {
         <Button onClick={nextMonth}>다음달</Button>
       </MonthController>
       <Table>
-        <TBody>{calendarArr()}</TBody>
+        <WeekDays>
+          <div>Mon</div>
+          <div>Mon</div>
+          <div>Mon</div>
+          <div>Mon</div>
+          <div>Mon</div>
+          <div>Mon</div>
+          <div>Mon</div>
+        </WeekDays>
+        <TableBody>{makeCalendar()}</TableBody>
       </Table>
     </Container>
   );
@@ -97,11 +126,11 @@ const Title = styled.div`
 
 const MonthController = styled.div`
   display: flex;
-  flex-direction: row;
+  align-items: center;
   margin-bottom: 30px;
 `;
 
-const ThisMonth = styled.span`
+const ThisMonth = styled.div`
   margin: 0 20px;
   font-size: 20px;
   cursor: pointer;
@@ -109,37 +138,47 @@ const ThisMonth = styled.span`
 
 const Button = styled.button`
   width: 60px;
-  height: 40px;
+  height: 30px;
   color: white;
   background-color: ${({ theme }) => theme.color.main};
-  border: none;
+  border: 1px solid ${({ theme }) => theme.color.main};
+  border-radius: 10px;
   cursor: pointer;
 `;
 
-const Table = styled.table`
+const Table = styled.div`
+  /* display: flex; */
+  border-top: 1px solid black;
+`;
+
+const WeekDays = styled.div`
   display: flex;
 `;
 
-const TBody = styled.tbody`
+const TableBody = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const TR = styled.tr`
+const Week = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const TD = styled.td`
+const Day = styled.div`
   display: flex;
-  border: 1px solid ${({ theme }) => theme.color.main};
   width: 120px;
   height: 100px;
+  border-bottom: 1px solid black;
+  /* background-image: url('images/test-thumbnail.jpg');
+  background-size: cover; */
   font-size: 1.5rem;
 `;
 
-const Days = styled.span`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+const Date = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
 `;

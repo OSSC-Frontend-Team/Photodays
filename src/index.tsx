@@ -10,14 +10,12 @@ import { RecoilRoot } from 'recoil';
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
+    <GlobalStyle />
     <RecoilRoot>
       <App />
       <MainCal />
+      <Sidebar />
     </RecoilRoot>
-    <GlobalStyle />
-    <App />
-    <Sidebar />
-    <MainCal />
   </ThemeProvider>,
   document.getElementById('root'),
 );
