@@ -22,4 +22,32 @@ export const mockData: InfoType[] = [
     location: 'empty',
     description: 'empty',
   },
+  {
+    date: 'empty', // YYYYMMDD => 20220318
+    img_url: 'empty',
+    title: 'empty',
+    location: 'empty',
+    description: 'empty',
+  },
+  {
+    date: 'empty', // YYYYMMDD => 20220318
+    img_url: 'empty',
+    title: 'empty',
+    location: 'empty',
+    description: 'empty',
+  },
+  {
+    date: 'empty', // YYYYMMDD => 20220318
+    img_url: 'empty',
+    title: 'empty',
+    location: 'empty',
+    description: 'empty',
+  },
+  {
+    date: 'empty', // YYYYMMDD => 20220318
+    img_url: 'empty',
+    title: 'empty',
+    location: 'empty',
+    description: 'empty',
+  },
 ];

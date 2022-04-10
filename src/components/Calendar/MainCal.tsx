@@ -7,11 +7,6 @@ import { theme } from '../../styles/theme';
 const MainCal = () => {
   const [getMoment, setMoment] = useState(moment());
 
-  const dates: string[] = [];
-  mockData.map((obj) => {
-    if (obj.date !== 'empty') dates.push(obj.date);
-  });
-
   const today: moment.Moment = getMoment;
   const firstWeek: number = today.clone().startOf('month').week();
   let lastWeek = 0;
@@ -41,21 +36,7 @@ const MainCal = () => {
             .fill(0)
             .map((_: null, idx: number) => {
               const days: moment.Moment = today.clone().startOf('year').week(week).startOf('week').add(idx, 'day');
-
-              if (dates.includes(days.format('YYYYMMDD'))) {
-                return (
-                  <Day
-                    key={idx}
-                    style={{
-                      backgroundImage: `url(${mockData[1].img_url})`,
-                      backgroundSize: 'cover',
-                    }}
-                    onClick={popUp}
-                  >
-                    <Date>{days.format('D')}</Date>
-                  </Day>
-                );
-              } else if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+              if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
                 return (
                   <Day key={idx} onClick={popUp}>
                     <Date style={{ backgroundColor: `${theme.color.main}`, color: 'white' }}>{days.format('D')}</Date>
@@ -69,7 +50,7 @@ const MainCal = () => {
                 );
               } else {
                 return (
-                  <Day key={idx} onClick={popUp}>
+                  <Day key={idx} style={{ color: `${idx === 0 ? 'red' : 'black'}` }} onClick={popUp}>
                     <Date>{days.format('D')}</Date>
                   </Day>
                 );
@@ -81,6 +62,11 @@ const MainCal = () => {
     return result;
   };
 
+  const dates: string[] = [];
+  mockData.map((obj) => {
+    if (obj.date !== 'empty') dates.push(obj.date);
+  });
+
   return (
     <Container>
       <Title>Photodays</Title>
@@ -91,13 +77,13 @@ const MainCal = () => {
       </MonthController>
       <Table>
         <WeekDays>
-          <div>Mon</div>
-          <div>Mon</div>
-          <div>Mon</div>
-          <div>Mon</div>
-          <div>Mon</div>
-          <div>Mon</div>
-          <div>Mon</div>
+          <div>SUN</div>
+          <div>MON</div>
+          <div>TUE</div>
+          <div>WED</div>
+          <div>THU</div>
+          <div>FRI</div>
+          <div>SAT</div>
         </WeekDays>
         <TableBody>{makeCalendar()}</TableBody>
       </Table>
@@ -153,6 +139,16 @@ const Table = styled.div`
 
 const WeekDays = styled.div`
   display: flex;
+  height: 50px;
+  border-bottom: 1px solid black;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    font-size: 1.5rem;
+  }
 `;
 
 const TableBody = styled.div`
