@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
+import Sidebar from '../Sidebar/Sidebar';
 import moment from 'moment';
 import styled from 'styled-components';
+import useModal from '../../hooks/useModal';
+import Modal from '../common/modal/Modal';
+import ModalTemplate from '../common/modal/modalTemplate/ModalTemplate';
+import AddImgForm from '../common/modal/modalContent/addImgForm/AddImgForm';
+import SetContentInfoForm from '../common/modal/modalContent/setContentInfoForm/SetContentInfoForm';
+import { useRecoilState } from 'recoil';
+import type { InfoType } from '../../recoil/photoInfo';
+import { tmpInfoState } from '../../recoil/photoInfo';
 import { mockData } from './mockdata';
 import { theme } from '../../styles/theme';
 
 const MainCal = () => {
   const [getMoment, setMoment] = useState(moment());
+  const { isShowing, modalInfo, setModalVisible } = useModal();
+  const [tmpInfo, _] = useRecoilState<InfoType>(tmpInfoState);
 
   const today: moment.Moment = getMoment;
   const firstWeek: number = today.clone().startOf('month').week();
@@ -22,9 +33,10 @@ const MainCal = () => {
     setMoment(getMoment.clone().add(1, 'month'));
   };
 
-  const popUp = () => {
-    alert('clicked');
-  };
+  const dates: string[] = [];
+  mockData.map((obj) => {
+    obj.date !== 'empty' ? dates.push(obj.date) : null;
+  });
 
   const makeCalendar = () => {
     let result: JSX.Element[] = [];
@@ -36,21 +48,31 @@ const MainCal = () => {
             .fill(0)
             .map((_: null, idx: number) => {
               const days: moment.Moment = today.clone().startOf('year').week(week).startOf('week').add(idx, 'day');
-              if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+              if (dates.includes(days.format('YYYYMMDD'))) {
                 return (
-                  <Day key={idx} onClick={popUp}>
+                  <Day
+                    key={idx}
+                    style={{ backgroundImage: `url(images/${days.format('YYYYMMDD')}.jpg)`, backgroundSize: 'cover' }}
+                    onClick={setModalVisible}
+                  >
+                    {/* <Date style={{ backgroundColor: `${theme.color.main}`, color: 'white' }}>{days.format('D')}</Date> */}
+                  </Day>
+                );
+              } else if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+                return (
+                  <Day key={idx} onClick={setModalVisible}>
                     <Date style={{ backgroundColor: `${theme.color.main}`, color: 'white' }}>{days.format('D')}</Date>
                   </Day>
                 );
               } else if (days.format('MM') !== today.format('MM')) {
                 return (
-                  <Day key={idx} style={{ color: 'lightgray' }} onClick={popUp}>
+                  <Day key={idx} style={{ color: 'lightgray' }} onClick={setModalVisible}>
                     <Date>{days.format('D')}</Date>
                   </Day>
                 );
               } else {
                 return (
-                  <Day key={idx} style={{ color: `${idx === 0 ? 'red' : 'black'}` }} onClick={popUp}>
+                  <Day key={idx} style={{ color: `${idx === 0 ? 'red' : 'black'}` }} onClick={setModalVisible}>
                     <Date>{days.format('D')}</Date>
                   </Day>
                 );
@@ -62,13 +84,12 @@ const MainCal = () => {
     return result;
   };
 
-  const dates: string[] = [];
-  mockData.map((obj) => {
-    if (obj.date !== 'empty') dates.push(obj.date);
-  });
-
   return (
     <Container>
+      <Sidebar />
+      <Modal isShowing={isShowing} hide={setModalVisible}>
+        <ModalTemplate>{tmpInfo.img_url === 'empty' ? <AddImgForm /> : <SetContentInfoForm />}</ModalTemplate>
+      </Modal>
       <Title>Photodays</Title>
       <MonthController>
         <Button onClick={prevMonth}>이전달</Button>
@@ -94,6 +115,7 @@ const MainCal = () => {
 export default MainCal;
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   font-size: 1.5vh;
@@ -166,8 +188,6 @@ const Day = styled.div`
   width: 120px;
   height: 100px;
   border-bottom: 1px solid black;
-  /* background-image: url('images/test-thumbnail.jpg');
-  background-size: cover; */
   font-size: 1.5rem;
 `;
 
